@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { categories, menu, type CategoryKey } from "@/lib/menu";
-import { ItemCard } from "./ItemCard";
+import { MenuPhotoCard } from "./MenuPhotoCard";
 
 type FilterKey = CategoryKey | "all";
 
@@ -38,9 +38,9 @@ export function MenuGrid() {
         ))}
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4.5">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5">
         {visible.map((item) => (
-          <ItemCard key={item.name} item={item} />
+          <MenuPhotoCard key={item.name} item={item} />
         ))}
       </div>
     </div>
