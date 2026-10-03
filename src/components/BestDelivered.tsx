@@ -2,6 +2,7 @@ import { BracketHeading } from "./BracketHeading";
 import { CategoryIcon } from "./CategoryIcon";
 import { menu } from "@/lib/menu";
 import { waLink, orderItemText } from "@/lib/whatsapp";
+import { formatUGX } from "@/lib/currency";
 
 const featured = menu.filter((item) => item.signature);
 
@@ -32,7 +33,9 @@ export function BestDelivered() {
               </div>
               <h3 className="text-2xl font-extrabold">{item.name}</h3>
               <p className="flex-1 text-sm text-fg-dim">{item.description}</p>
-              <p className="font-display text-2xl font-extrabold text-accent-soft">${item.price}/-</p>
+              <p className="font-display text-2xl font-extrabold text-accent-soft">
+                {formatUGX(item.price)}
+              </p>
               <div className="flex items-center gap-3">
                 <a
                   href={waLink(orderItemText(item.name, item.price))}

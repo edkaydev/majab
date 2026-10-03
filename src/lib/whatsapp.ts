@@ -1,3 +1,5 @@
+import { formatUGX } from "./currency";
+
 // TODO: replace with the real WhatsApp number (digits only, country code first, no symbols).
 export const WHATSAPP_NUMBER = "15550101234";
 export const WHATSAPP_DISPLAY = "+1 (555) 010-1234";
@@ -7,7 +9,7 @@ export function waLink(text: string): string {
 }
 
 export function orderItemText(name: string, price: number): string {
-  return `Hi Majab's Deli, I'd like to order: ${name} ($${price})`;
+  return `Hi Majab's Deli, I'd like to order: ${name} (${formatUGX(price)})`;
 }
 
 export const DELIVERY_ZONES = [
@@ -23,7 +25,7 @@ export function buildCartMessage(
   opts?: { promoCode?: string; discount?: number; deliveryFee?: number; deliveryZone?: string }
 ): string {
   const itemLines = lines.map(
-    (line) => `• ${line.qty}x ${line.name} — $${(line.price * line.qty).toFixed(2)}`
+    (line) => `• ${line.qty}x ${line.name} — ${formatUGX(line.price * line.qty)}`
   );
   const subtotal = lines.reduce((sum, line) => sum + line.price * line.qty, 0);
   const deliveryFee = mode === "delivery" ? opts?.deliveryFee ?? 0 : 0;
@@ -31,10 +33,10 @@ export function buildCartMessage(
   const total = subtotal + deliveryFee - discount;
 
   const summary = [
-    `Subtotal: $${subtotal.toFixed(2)}`,
-    mode === "delivery" ? `Delivery fee: $${deliveryFee.toFixed(2)}` : null,
-    opts?.promoCode ? `Promo (${opts.promoCode}): -$${discount.toFixed(2)}` : null,
-    `Total: $${total.toFixed(2)}`,
+    `Subtotal: ${formatUGX(subtotal)}`,
+    mode === "delivery" ? `Delivery fee: ${formatUGX(deliveryFee)}` : null,
+    opts?.promoCode ? `Promo (${opts.promoCode}): -${formatUGX(discount)}` : null,
+    `Total: ${formatUGX(total)}`,
   ].filter(Boolean);
 
   const deliveryDetails =

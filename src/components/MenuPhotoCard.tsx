@@ -1,6 +1,7 @@
 import { CategoryIcon } from "./CategoryIcon";
 import { AddToCart } from "./AddToCart";
 import type { MenuItem } from "@/lib/menu";
+import { formatUGX } from "@/lib/currency";
 
 export function MenuPhotoCard({ item }: { item: MenuItem }) {
   return (
@@ -11,10 +12,10 @@ export function MenuPhotoCard({ item }: { item: MenuItem }) {
           className="h-16 w-16 opacity-80 transition-transform duration-300 group-hover:scale-110"
         />
       </div>
-      <div className="flex items-baseline justify-between gap-3 px-1">
-        <h3 className="min-w-0 text-lg font-bold">{item.name}</h3>
-        <span className="whitespace-nowrap font-display text-lg font-extrabold tabular-nums text-accent-soft">
-          ${item.price}
+      <div className="flex flex-col gap-1 px-1">
+        <h3 className="text-lg font-bold">{item.name}</h3>
+        <span className="font-display text-base font-extrabold tabular-nums text-accent-soft">
+          {formatUGX(item.price)}
         </span>
       </div>
       <p className="px-1 text-sm text-fg-dim">{item.description}</p>

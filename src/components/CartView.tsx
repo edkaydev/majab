@@ -6,8 +6,9 @@ import { useCart } from "./CartProvider";
 import { cartSubtotal } from "@/lib/cart";
 import { buildCartMessage, waLink, DELIVERY_ZONES } from "@/lib/whatsapp";
 import { menu } from "@/lib/menu";
+import { formatUGX } from "@/lib/currency";
 
-const DELIVERY_FEE = 5;
+const DELIVERY_FEE = 5000;
 const PROMO_CODE = "ROADSIDE10";
 const PROMO_RATE = 0.1;
 
@@ -96,7 +97,7 @@ export function CartView() {
                 </p>
               </div>
               <span className="font-display font-extrabold tabular-nums text-accent-soft">
-                ${(line.price * line.qty).toFixed(2)}
+                {formatUGX(line.price * line.qty)}
               </span>
               <div className="flex items-center gap-2 rounded-xl border border-line px-1.5 py-1">
                 <button
@@ -218,23 +219,23 @@ export function CartView() {
         <div className="flex flex-col gap-2 border-t border-line pt-4 text-sm">
           <div className="flex justify-between text-fg-dim">
             <span>Subtotal</span>
-            <span className="tabular-nums">${subtotal.toFixed(2)}</span>
+            <span className="tabular-nums">{formatUGX(subtotal)}</span>
           </div>
           {mode === "delivery" && (
             <div className="flex justify-between text-fg-dim">
               <span>Delivery fee</span>
-              <span className="tabular-nums">${deliveryFee.toFixed(2)}</span>
+              <span className="tabular-nums">{formatUGX(deliveryFee)}</span>
             </div>
           )}
           {appliedPromo && (
             <div className="flex justify-between text-accent-soft">
               <span>Promo ({appliedPromo})</span>
-              <span className="tabular-nums">-${discount.toFixed(2)}</span>
+              <span className="tabular-nums">-{formatUGX(discount)}</span>
             </div>
           )}
           <div className="flex justify-between border-t border-line pt-2 text-base font-bold">
             <span>Total</span>
-            <span className="tabular-nums">${total.toFixed(2)}</span>
+            <span className="tabular-nums">{formatUGX(total)}</span>
           </div>
         </div>
 
