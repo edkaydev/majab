@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 import { BracketHeading } from "@/components/BracketHeading";
-import { waLink, DELIVERY_TEXT } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
   title: "Order",
@@ -41,8 +40,8 @@ export default function OrderPage() {
             </BracketHeading>
           </h1>
           <p className="mt-3 max-w-[56ch] text-fg-dim">
-            No app, no account — just WhatsApp. Tap the button, tell us what you&apos;re craving
-            and where you are, and we&apos;ll confirm the time. Cash on delivery.
+            No app, no account — just WhatsApp. Pick what you&apos;re craving from the menu, tell
+            us where you are, and we&apos;ll confirm the time. Cash on delivery.
           </p>
         </Reveal>
 
@@ -58,29 +57,17 @@ export default function OrderPage() {
               </div>
               <h2 className="text-[1.9rem]">Delivery</h2>
               <p className="max-w-[40ch] text-fg-dim">
-                We&apos;ll send it hot to your door around Nkozi and Kayabwe. Message your order
-                and location and we&apos;ll confirm the time and delivery fee.
+                We&apos;ll send it hot to your door around Nkozi and Kayabwe. Build your order from
+                the menu, then check out straight to WhatsApp.
               </p>
-              <a
-                href={waLink(DELIVERY_TEXT)}
-                target="_blank"
-                rel="noopener"
+              <Link
+                href="/menu"
                 className="mt-2.5 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-6.5 py-3.5 text-sm font-bold text-ink transition-all hover:-translate-y-0.75 hover:shadow-[0_14px_30px_-10px_rgba(255,106,31,0.65)]"
               >
                 Order for Delivery
-              </a>
+              </Link>
             </div>
           </div>
-        </Reveal>
-
-        <Reveal className="mt-9 text-center">
-          <p className="text-sm text-fg-dim">
-            Ordering more than one thing?{" "}
-            <Link href="/menu" className="font-bold text-accent hover:text-accent-soft">
-              Build it in the menu
-            </Link>{" "}
-            and check out your whole cart at once.
-          </p>
         </Reveal>
       </div>
     </section>
