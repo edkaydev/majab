@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "./CartProvider";
 import { cartSubtotal } from "@/lib/cart";
-import { buildCartMessage, waLink, DELIVERY_ZONES } from "@/lib/whatsapp";
+import { buildCartMessage, waLink, DELIVERY_ZONES, UMU_ZONE } from "@/lib/whatsapp";
 import { menu } from "@/lib/menu";
 import { formatUGX } from "@/lib/currency";
 
@@ -20,6 +20,9 @@ export function CartView() {
   const { lines, setQty, remove, clear } = useCart();
   const [mode, setMode] = useState<"delivery" | "pickup">("pickup");
   const [deliveryZone, setDeliveryZone] = useState("");
+  const [hostel, setHostel] = useState("");
+  const [roomNumber, setRoomNumber] = useState("");
+  const [deliveryNotes, setDeliveryNotes] = useState("");
   const [promoInput, setPromoInput] = useState("");
   const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
   const [promoError, setPromoError] = useState(false);
@@ -41,7 +44,10 @@ export function CartView() {
     }
   }
 
-  const canCheckout = mode === "pickup" || deliveryZone !== "";
+  const isUmu = deliveryZone === UMU_ZONE;
+  const canCheckout =
+    mode === "pickup" ||
+    (deliveryZone !== "" && (!isUmu || (hostel.trim() !== "" && roomNumber.trim() !== "")));
 
   const checkoutHref = waLink(
     buildCartMessage(lines, mode, {
@@ -49,6 +55,9 @@ export function CartView() {
       discount,
       deliveryFee,
       deliveryZone: deliveryZone || undefined,
+      hostel: isUmu ? hostel.trim() || undefined : undefined,
+      roomNumber: isUmu ? roomNumber.trim() || undefined : undefined,
+      deliveryNotes: deliveryNotes.trim() || undefined,
     })
   );
 
@@ -189,6 +198,62 @@ export function CartView() {
           </div>
         )}
 
+        {mode === "delivery" && isUmu && (
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="hostel"
+                className="text-xs font-semibold uppercase tracking-wide text-fg-dim"
+              >
+                Hostel
+              </label>
+              <input
+                id="hostel"
+                value={hostel}
+                onChange={(e) => setHostel(e.target.value)}
+                placeholder="e.g. Maria Hostel"
+                required
+                className="rounded-full border border-line bg-raised-2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent-soft"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="room-number"
+                className="text-xs font-semibold uppercase tracking-wide text-fg-dim"
+              >
+                Room number
+              </label>
+              <input
+                id="room-number"
+                value={roomNumber}
+                onChange={(e) => setRoomNumber(e.target.value)}
+                placeholder="e.g. B12"
+                required
+                className="rounded-full border border-line bg-raised-2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent-soft"
+              />
+            </div>
+          </div>
+        )}
+
+        {mode === "delivery" && (
+          <div className="flex flex-col gap-1.5">
+            <label
+              htmlFor="delivery-notes"
+              className="text-xs font-semibold uppercase tracking-wide text-fg-dim"
+            >
+              More description (optional)
+            </label>
+            <textarea
+              id="delivery-notes"
+              value={deliveryNotes}
+              onChange={(e) => setDeliveryNotes(e.target.value)}
+              placeholder="Landmark, directions, gate colour — anything that helps us find you"
+              rows={2}
+              className="resize-none rounded-2xl border border-line bg-raised-2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent-soft"
+            />
+          </div>
+        )}
+
         <form onSubmit={applyPromo} className="flex flex-col gap-1.5">
           <div
             className={`flex items-center gap-2 rounded-full border px-4 py-2 transition-colors ${
@@ -255,7 +320,9 @@ export function CartView() {
         </a>
         {mode === "delivery" && !canCheckout ? (
           <p className="text-center text-xs font-semibold text-accent-soft">
-            Select a delivery area to continue.
+            {deliveryZone === ""
+              ? "Select a delivery area to continue."
+              : "Add your hostel and room number to continue."}
           </p>
         ) : (
           <p className="text-center text-xs text-fg-dim">

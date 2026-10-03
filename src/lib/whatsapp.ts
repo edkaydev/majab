@@ -12,17 +12,33 @@ export function orderItemText(name: string, price: number): string {
   return `Hi Majab's Deli, I'd like to order: ${name} (${formatUGX(price)})`;
 }
 
+export const UMU_ZONE = "Uganda Martyrs University (hostel)";
+
 export const DELIVERY_ZONES = [
-  "Junction 4 / Expressway Road",
-  "Mile-Marker 5",
-  "Roadside Market District",
+  "Nkozi TC",
+  UMU_ZONE,
+  "Kayabwe-Nkozi Junction",
+  "Soweto",
+  "Equator",
+  "Kafeene",
+  "Kayembe",
+  "Kayabwe Taxi Park",
+  "Kayabwe-Nkozi Boda Stage",
   "Other area (I'll share my address)",
 ];
 
 export function buildCartMessage(
   lines: { name: string; price: number; qty: number }[],
   mode: "delivery" | "pickup",
-  opts?: { promoCode?: string; discount?: number; deliveryFee?: number; deliveryZone?: string }
+  opts?: {
+    promoCode?: string;
+    discount?: number;
+    deliveryFee?: number;
+    deliveryZone?: string;
+    hostel?: string;
+    roomNumber?: string;
+    deliveryNotes?: string;
+  }
 ): string {
   const itemLines = lines.map(
     (line) => `• ${line.qty}x ${line.name} — ${formatUGX(line.price * line.qty)}`
@@ -41,7 +57,14 @@ export function buildCartMessage(
 
   const deliveryDetails =
     mode === "delivery"
-      ? ["", `Delivery area: ${opts?.deliveryZone ?? "—"}`, "Payment: Cash on Delivery"]
+      ? [
+          "",
+          `Delivery area: ${opts?.deliveryZone ?? "—"}`,
+          opts?.hostel ? `Hostel: ${opts.hostel}` : null,
+          opts?.roomNumber ? `Room number: ${opts.roomNumber}` : null,
+          opts?.deliveryNotes ? `Notes: ${opts.deliveryNotes}` : null,
+          "Payment: Cash on Delivery",
+        ].filter((line): line is string => line !== null)
       : [];
 
   return [
