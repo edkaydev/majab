@@ -3,7 +3,7 @@ import { CartView } from "@/components/CartView";
 
 export const metadata: Metadata = {
   title: "Cart",
-  description: "Review your order and check out straight to WhatsApp for delivery or pickup.",
+  description: "Review your order and check out straight to WhatsApp for delivery.",
 };
 
 export default function CartPage() {

@@ -51,7 +51,7 @@ export default function HomePage() {
             <Reveal className="mt-6 max-w-[48ch]">
               <p className="text-lg text-fg-dim">
                 From flame-grilled classics to loaded sides, every plate is cooked fresh the
-                moment you order — pull up to the junction, or send it straight to your door.
+                moment you order and sent straight to your door.
               </p>
             </Reveal>
 

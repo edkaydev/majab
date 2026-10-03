@@ -22,8 +22,7 @@ export const metadata: Metadata = {
     default: "Majab's Deli",
     template: "%s · Majab's Deli",
   },
-  description:
-    "Flame-grilled roadside eats. Order ahead on WhatsApp for delivery or pickup at the junction.",
+  description: "Flame-grilled roadside eats. Order ahead on WhatsApp for delivery around Nkozi.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

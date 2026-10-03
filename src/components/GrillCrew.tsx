@@ -30,8 +30,8 @@ export function GrillCrew() {
             </p>
             <p className="text-fg-dim">
               The crew brings years on the grates and a love for flame-first cooking to every
-              order, whether it&apos;s sliding across the counter or landing on your doorstep. No
-              pretense — just the good stuff, done properly, every single time.
+              order, whether you&apos;re right at Nkozi TC or out past Kayabwe. No pretense — just
+              the good stuff, done properly, every single time.
             </p>
             <Link
               href="/find-us"

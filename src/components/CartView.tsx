@@ -18,7 +18,6 @@ function categoryFor(name: string) {
 
 export function CartView() {
   const { lines, setQty, remove, clear } = useCart();
-  const [mode, setMode] = useState<"delivery" | "pickup">("pickup");
   const [deliveryZone, setDeliveryZone] = useState("");
   const [hostel, setHostel] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
@@ -29,7 +28,7 @@ export function CartView() {
 
   const subtotal = cartSubtotal(lines);
   const discount = appliedPromo ? subtotal * PROMO_RATE : 0;
-  const deliveryFee = mode === "delivery" && lines.length ? DELIVERY_FEE : 0;
+  const deliveryFee = lines.length ? DELIVERY_FEE : 0;
   const total = subtotal + deliveryFee - discount;
 
   function applyPromo(e: React.FormEvent) {
@@ -46,11 +45,10 @@ export function CartView() {
 
   const isUmu = deliveryZone === UMU_ZONE;
   const canCheckout =
-    mode === "pickup" ||
-    (deliveryZone !== "" && (!isUmu || (hostel.trim() !== "" && roomNumber.trim() !== "")));
+    deliveryZone !== "" && (!isUmu || (hostel.trim() !== "" && roomNumber.trim() !== ""));
 
   const checkoutHref = waLink(
-    buildCartMessage(lines, mode, {
+    buildCartMessage(lines, {
       promoCode: appliedPromo ?? undefined,
       discount,
       deliveryFee,
@@ -150,55 +148,32 @@ export function CartView() {
       </div>
 
       <div className="flex flex-col gap-5 self-start rounded-[22px] border border-line bg-bg-raised p-6">
-        <div className="flex gap-2 rounded-full border border-line p-1">
-          <button
-            type="button"
-            onClick={() => setMode("pickup")}
-            className={`flex-1 rounded-full py-2 text-sm font-bold transition-colors ${
-              mode === "pickup" ? "bg-accent text-ink" : "text-fg-dim"
-            }`}
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="delivery-zone"
+            className="text-xs font-semibold uppercase tracking-wide text-fg-dim"
           >
-            Pickup
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("delivery")}
-            className={`flex-1 rounded-full py-2 text-sm font-bold transition-colors ${
-              mode === "delivery" ? "bg-accent text-ink" : "text-fg-dim"
-            }`}
+            Delivery area
+          </label>
+          <select
+            id="delivery-zone"
+            value={deliveryZone}
+            onChange={(e) => setDeliveryZone(e.target.value)}
+            required
+            className="rounded-full border border-line bg-raised-2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent-soft"
           >
-            Delivery
-          </button>
+            <option value="" disabled>
+              Select your area
+            </option>
+            {DELIVERY_ZONES.map((zone) => (
+              <option key={zone} value={zone}>
+                {zone}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {mode === "delivery" && (
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="delivery-zone"
-              className="text-xs font-semibold uppercase tracking-wide text-fg-dim"
-            >
-              Delivery area
-            </label>
-            <select
-              id="delivery-zone"
-              value={deliveryZone}
-              onChange={(e) => setDeliveryZone(e.target.value)}
-              required
-              className="rounded-full border border-line bg-raised-2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent-soft"
-            >
-              <option value="" disabled>
-                Select your area
-              </option>
-              {DELIVERY_ZONES.map((zone) => (
-                <option key={zone} value={zone}>
-                  {zone}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {mode === "delivery" && isUmu && (
+        {isUmu && (
           <div className="grid grid-cols-2 gap-2.5">
             <div className="flex flex-col gap-1.5">
               <label
@@ -235,24 +210,22 @@ export function CartView() {
           </div>
         )}
 
-        {mode === "delivery" && (
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="delivery-notes"
-              className="text-xs font-semibold uppercase tracking-wide text-fg-dim"
-            >
-              More description (optional)
-            </label>
-            <textarea
-              id="delivery-notes"
-              value={deliveryNotes}
-              onChange={(e) => setDeliveryNotes(e.target.value)}
-              placeholder="Landmark, directions, gate colour — anything that helps us find you"
-              rows={2}
-              className="resize-none rounded-2xl border border-line bg-raised-2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent-soft"
-            />
-          </div>
-        )}
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="delivery-notes"
+            className="text-xs font-semibold uppercase tracking-wide text-fg-dim"
+          >
+            More description (optional)
+          </label>
+          <textarea
+            id="delivery-notes"
+            value={deliveryNotes}
+            onChange={(e) => setDeliveryNotes(e.target.value)}
+            placeholder="Landmark, directions, gate colour — anything that helps us find you"
+            rows={2}
+            className="resize-none rounded-2xl border border-line bg-raised-2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent-soft"
+          />
+        </div>
 
         <form onSubmit={applyPromo} className="flex flex-col gap-1.5">
           <div
@@ -286,12 +259,10 @@ export function CartView() {
             <span>Subtotal</span>
             <span className="tabular-nums">{formatUGX(subtotal)}</span>
           </div>
-          {mode === "delivery" && (
-            <div className="flex justify-between text-fg-dim">
-              <span>Delivery fee</span>
-              <span className="tabular-nums">{formatUGX(deliveryFee)}</span>
-            </div>
-          )}
+          <div className="flex justify-between text-fg-dim">
+            <span>Delivery fee</span>
+            <span className="tabular-nums">{formatUGX(deliveryFee)}</span>
+          </div>
           {appliedPromo && (
             <div className="flex justify-between text-accent-soft">
               <span>Promo ({appliedPromo})</span>
@@ -318,7 +289,7 @@ export function CartView() {
         >
           Checkout via WhatsApp
         </a>
-        {mode === "delivery" && !canCheckout ? (
+        {!canCheckout ? (
           <p className="text-center text-xs font-semibold text-accent-soft">
             {deliveryZone === ""
               ? "Select a delivery area to continue."
@@ -326,9 +297,7 @@ export function CartView() {
           </p>
         ) : (
           <p className="text-center text-xs text-fg-dim">
-            {mode === "delivery"
-              ? "Cash on Delivery — sends your order to WhatsApp, we'll confirm the total there."
-              : "Sends your order to WhatsApp — we'll confirm the total there."}
+            Cash on Delivery — sends your order to WhatsApp, we&apos;ll confirm the total there.
           </p>
         )}
       </div>

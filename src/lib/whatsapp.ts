@@ -29,7 +29,6 @@ export const DELIVERY_ZONES = [
 
 export function buildCartMessage(
   lines: { name: string; price: number; qty: number }[],
-  mode: "delivery" | "pickup",
   opts?: {
     promoCode?: string;
     discount?: number;
@@ -44,31 +43,28 @@ export function buildCartMessage(
     (line) => `• ${line.qty}x ${line.name} — ${formatUGX(line.price * line.qty)}`
   );
   const subtotal = lines.reduce((sum, line) => sum + line.price * line.qty, 0);
-  const deliveryFee = mode === "delivery" ? opts?.deliveryFee ?? 0 : 0;
+  const deliveryFee = opts?.deliveryFee ?? 0;
   const discount = opts?.discount ?? 0;
   const total = subtotal + deliveryFee - discount;
 
   const summary = [
     `Subtotal: ${formatUGX(subtotal)}`,
-    mode === "delivery" ? `Delivery fee: ${formatUGX(deliveryFee)}` : null,
+    `Delivery fee: ${formatUGX(deliveryFee)}`,
     opts?.promoCode ? `Promo (${opts.promoCode}): -${formatUGX(discount)}` : null,
     `Total: ${formatUGX(total)}`,
   ].filter(Boolean);
 
-  const deliveryDetails =
-    mode === "delivery"
-      ? [
-          "",
-          `Delivery area: ${opts?.deliveryZone ?? "—"}`,
-          opts?.hostel ? `Hostel: ${opts.hostel}` : null,
-          opts?.roomNumber ? `Room number: ${opts.roomNumber}` : null,
-          opts?.deliveryNotes ? `Notes: ${opts.deliveryNotes}` : null,
-          "Payment: Cash on Delivery",
-        ].filter((line): line is string => line !== null)
-      : [];
+  const deliveryDetails = [
+    "",
+    `Delivery area: ${opts?.deliveryZone ?? "—"}`,
+    opts?.hostel ? `Hostel: ${opts.hostel}` : null,
+    opts?.roomNumber ? `Room number: ${opts.roomNumber}` : null,
+    opts?.deliveryNotes ? `Notes: ${opts.deliveryNotes}` : null,
+    "Payment: Cash on Delivery",
+  ].filter((line): line is string => line !== null);
 
   return [
-    `Hi Majab's Deli, I'd like to order for ${mode}${mode === "pickup" ? " — I'll pick it up at the junction" : ":"}`,
+    "Hi Majab's Deli, I'd like to order for delivery:",
     "",
     ...itemLines,
     "",
@@ -79,6 +75,4 @@ export function buildCartMessage(
 
 export const DELIVERY_TEXT =
   "Hi Majab's Deli, I'd like to place an order for delivery. Here's my order and address:";
-export const PICKUP_TEXT =
-  "Hi Majab's Deli, I'd like to place an order for pickup. Here's my order:";
 export const GENERAL_TEXT = "Hi Majab's Deli, I'd like to place an order.";

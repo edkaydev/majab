@@ -13,7 +13,7 @@ const reviews = [
     name: "Aisha R.",
     initials: "AR",
     quote:
-      "Ordered on WhatsApp for pickup and it was ready before I'd even found parking. Hot, fast, and the ribs don't mess around.",
+      "Ordered on WhatsApp from my hostel and it showed up before I'd even finished getting ready. Hot, fast, and the ribs don't mess around.",
   },
   {
     name: "Pete D.",

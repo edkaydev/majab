@@ -17,7 +17,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-fg-dim">
-              Flame-grilled roadside eats, cooked to order. Pull up to the junction or send your
+              Flame-grilled roadside eats, cooked to order and delivered around Nkozi. Send your
               order straight to WhatsApp.
             </p>
             <div className="flex gap-2.5">
