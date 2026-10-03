@@ -2,14 +2,13 @@ import Link from "next/link";
 import { FlameIcon } from "./FlameIcon";
 import { CopyButton } from "./CopyButton";
 import { SocialIcon } from "./SocialIcon";
-import { NewsletterForm } from "./NewsletterForm";
 import { WHATSAPP_DISPLAY } from "@/lib/whatsapp";
 
 export function Footer() {
   return (
     <footer className="border-t border-line bg-bg">
       <div className="mx-auto max-w-[1180px] px-5 pb-10 pt-14">
-        <div className="grid grid-cols-1 gap-10 border-b border-line pb-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 border-b border-line pb-10 sm:grid-cols-2 lg:grid-cols-3">
           <div className="flex max-w-[30ch] flex-col gap-3.5">
             <Link href="/" className="flex items-center gap-2 font-display text-xl font-extrabold">
               <FlameIcon className="text-accent" />
@@ -52,14 +51,6 @@ export function Footer() {
               Tap any &ldquo;Order&rdquo; button on the site and we&apos;ll open a chat with your
               order ready to send.
             </p>
-          </div>
-
-          <div className="flex flex-col gap-2.5">
-            <h4 className="text-xs tracking-[0.14em] text-fg-dim uppercase">
-              Sign Up For Specials
-            </h4>
-            <p className="text-sm text-fg-dim">Grill drops, new menu items, roadside news.</p>
-            <NewsletterForm />
           </div>
         </div>
 
