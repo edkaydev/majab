@@ -10,10 +10,17 @@ export function orderItemText(name: string, price: number): string {
   return `Hi Majab's Deli, I'd like to order: ${name} ($${price})`;
 }
 
+export const DELIVERY_ZONES = [
+  "Junction 4 / Expressway Road",
+  "Mile-Marker 5",
+  "Roadside Market District",
+  "Other area (I'll share my address)",
+];
+
 export function buildCartMessage(
   lines: { name: string; price: number; qty: number }[],
   mode: "delivery" | "pickup",
-  opts?: { promoCode?: string; discount?: number; deliveryFee?: number }
+  opts?: { promoCode?: string; discount?: number; deliveryFee?: number; deliveryZone?: string }
 ): string {
   const itemLines = lines.map(
     (line) => `• ${line.qty}x ${line.name} — $${(line.price * line.qty).toFixed(2)}`
@@ -30,12 +37,18 @@ export function buildCartMessage(
     `Total: $${total.toFixed(2)}`,
   ].filter(Boolean);
 
+  const deliveryDetails =
+    mode === "delivery"
+      ? ["", `Delivery area: ${opts?.deliveryZone ?? "—"}`, "Payment: Cash on Delivery"]
+      : [];
+
   return [
-    `Hi Majab's Deli, I'd like to order for ${mode}${mode === "pickup" ? " — I'll pick it up at the junction" : ", here's my address:"}`,
+    `Hi Majab's Deli, I'd like to order for ${mode}${mode === "pickup" ? " — I'll pick it up at the junction" : ":"}`,
     "",
     ...itemLines,
     "",
     ...summary,
+    ...deliveryDetails,
   ].join("\n");
 }
 
