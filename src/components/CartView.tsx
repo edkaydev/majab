@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "./CartProvider";
 import { cartSubtotal } from "@/lib/cart";
-import { buildCartMessage, waLink } from "@/lib/whatsapp";
+import { buildCartMessage, waLink, DELIVERY_ZONES } from "@/lib/whatsapp";
 import { menu } from "@/lib/menu";
 
 const DELIVERY_FEE = 5;
@@ -18,6 +18,7 @@ function categoryFor(name: string) {
 export function CartView() {
   const { lines, setQty, remove, clear } = useCart();
   const [mode, setMode] = useState<"delivery" | "pickup">("pickup");
+  const [deliveryZone, setDeliveryZone] = useState("");
   const [promoInput, setPromoInput] = useState("");
   const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
   const [promoError, setPromoError] = useState(false);
@@ -39,11 +40,14 @@ export function CartView() {
     }
   }
 
+  const canCheckout = mode === "pickup" || deliveryZone !== "";
+
   const checkoutHref = waLink(
     buildCartMessage(lines, mode, {
       promoCode: appliedPromo ?? undefined,
       discount,
       deliveryFee,
+      deliveryZone: deliveryZone || undefined,
     })
   );
 
@@ -157,6 +161,33 @@ export function CartView() {
           </button>
         </div>
 
+        {mode === "delivery" && (
+          <div className="flex flex-col gap-1.5">
+            <label
+              htmlFor="delivery-zone"
+              className="text-xs font-semibold uppercase tracking-wide text-fg-dim"
+            >
+              Delivery area
+            </label>
+            <select
+              id="delivery-zone"
+              value={deliveryZone}
+              onChange={(e) => setDeliveryZone(e.target.value)}
+              required
+              className="rounded-full border border-line bg-raised-2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent-soft"
+            >
+              <option value="" disabled>
+                Select your area
+              </option>
+              {DELIVERY_ZONES.map((zone) => (
+                <option key={zone} value={zone}>
+                  {zone}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <form onSubmit={applyPromo} className="flex flex-col gap-1.5">
           <div
             className={`flex items-center gap-2 rounded-full border px-4 py-2 transition-colors ${
@@ -208,16 +239,30 @@ export function CartView() {
         </div>
 
         <a
-          href={checkoutHref}
+          href={canCheckout ? checkoutHref : undefined}
           target="_blank"
           rel="noopener"
-          className="rounded-full bg-accent py-3.5 text-center font-bold text-ink transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+          aria-disabled={!canCheckout}
+          onClick={(e) => {
+            if (!canCheckout) e.preventDefault();
+          }}
+          className={`rounded-full bg-accent py-3.5 text-center font-bold text-ink transition-transform hover:-translate-y-0.5 active:scale-[0.98] ${
+            canCheckout ? "" : "pointer-events-none opacity-50"
+          }`}
         >
           Checkout via WhatsApp
         </a>
-        <p className="text-center text-xs text-fg-dim">
-          Sends your order to WhatsApp — we&apos;ll confirm the total there.
-        </p>
+        {mode === "delivery" && !canCheckout ? (
+          <p className="text-center text-xs font-semibold text-accent-soft">
+            Select a delivery area to continue.
+          </p>
+        ) : (
+          <p className="text-center text-xs text-fg-dim">
+            {mode === "delivery"
+              ? "Cash on Delivery — sends your order to WhatsApp, we'll confirm the total there."
+              : "Sends your order to WhatsApp — we'll confirm the total there."}
+          </p>
+        )}
       </div>
     </div>
   );
