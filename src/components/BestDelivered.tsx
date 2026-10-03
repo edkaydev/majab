@@ -10,11 +10,12 @@ export function BestDelivered() {
   return (
     <section className="py-20">
       <div className="mx-auto max-w-[1180px] px-5">
-        <h2 className="mb-9 text-[clamp(2rem,4.5vw,2.8rem)]">
+        <h2 className="text-[clamp(2rem,4.5vw,2.8rem)]">
           <BracketHeading>
             Straight Off The <span className="text-accent">Grill</span>
           </BracketHeading>
         </h2>
+        <p className="mb-9 mt-2 text-sm text-fg-dim">No cap, these hit different.</p>
       </div>
 
       <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-[max(20px,calc((100vw-1180px)/2))]">

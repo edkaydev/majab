@@ -1,10 +1,11 @@
 const WORDS = [
   "FLAME GRILLED",
+  "ACTUALLY BUSSIN",
   "FRESH DAILY",
   "OPEN LATE",
   "WHATSAPP ORDERS",
-  "GRILL TO GO",
-  "EST. AT THE JUNCTION",
+  "ZERO CRUMBS LEFT",
+  "EST. AT NKOZI",
 ];
 
 export function Marquee() {

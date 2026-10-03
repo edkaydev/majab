@@ -25,7 +25,7 @@ export function PromoBanner() {
               <span className="flex h-8 items-center rounded-full bg-accent px-2.5 text-xs font-bold text-ink">
                 40+
               </span>
-              <span className="text-sm text-ink/70">regulars already hooked</span>
+              <span className="text-sm text-ink/70">regulars already obsessed</span>
             </div>
           </div>
 

@@ -28,6 +28,9 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-12 px-5 md:grid-cols-[1.05fr_0.95fr] md:gap-8">
           <div>
             <Reveal>
+              <p className="mb-3 text-[0.78rem] font-semibold uppercase tracking-[0.22em] text-accent-soft">
+                No cap, Nkozi&apos;s most bussin grill
+              </p>
               <h1 className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[clamp(2.6rem,6.4vw,4.6rem)] font-extrabold leading-[1.04]">
                 <span>Experience the</span>
                 <span className="relative inline-flex items-center gap-2 text-accent">
